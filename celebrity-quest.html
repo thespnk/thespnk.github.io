@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Celebrity Quest</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Cinzel:wght@400;700&display=swap');
+    
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      min-height: 100vh;
+      background: linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 50%, #16213e 100%);
+      font-family: 'Playfair Display', Georgia, serif;
+      color: #e8d5b7;
+      overflow-x: hidden;
+    }
+    
+    .stars {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      pointer-events: none;
+      z-index: 1;
+    }
+    
+    .star {
+      position: absolute;
+      background: #ffd700;
+      border-radius: 50%;
+      animation: twinkle 3s ease-in-out infinite;
+    }
+    
+    @keyframes twinkle {
+      0%, 100% { opacity: 0.3; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.2); }
+    }
+    
+    @keyframes pulse {
+      0%, 100% { box-shadow: 0 0 20px rgba(255, 215, 0, 0.3); }
+      50% { box-shadow: 0 0 40px rgba(255, 215, 0, 0.6); }
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 80px 30px 40px;
+      position: relative;
+      z-index: 10;
+      animation: fadeIn 0.5s ease-out;
+    }
+    
+    .code-display {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: rgba(0,0,0,0.7);
+      border: 2px solid #ffd700;
+      border-radius: 10px;
+      padding: 15px 25px;
+      z-index: 100;
+    }
+    
+    .code-label {
+      font-size: 12px;
+      letter-spacing: 3px;
+      color: #888;
+      margin-bottom: 5px;
+    }
+    
+    .code-value {
+      font-size: 32px;
+      font-family: monospace;
+      letter-spacing: 10px;
+      color: #ffd700;
+      text-shadow: 0 0 10px #ffd700;
+    }
+    
+    h1 {
+      font-size: 48px;
+      font-family: 'Cinzel', serif;
+      color: #ffd700;
+      text-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
+      margin-bottom: 20px;
+      letter-spacing: 5px;
+      text-align: center;
+    }
+    
+    h2 {
+      font-size: 28px;
+      font-family: 'Cinzel', serif;
+      color: #ffd700;
+      margin: 0;
+    }
+    
+    .subtitle {
+      font-size: 18px;
+      font-style: italic;
+      color: #888;
+      margin-bottom: 40px;
+      text-align: center;
+    }
+    
+    .card {
+      background: rgba(0,0,0,0.5);
+      border: 1px solid #333;
+      border-radius: 15px;
+      padding: 40px;
+      margin-bottom: 30px;
+      line-height: 1.8;
+    }
+    
+    .card p {
+      font-size: 18px;
+      margin-bottom: 20px;
+    }
+    
+    .highlight { color: #ffd700; }
+    
+    .hint {
+      font-size: 16px;
+      color: #ffd700;
+      border-left: 3px solid #ffd700;
+      padding-left: 15px;
+      font-style: italic;
+    }
+    
+    .btn {
+      display: inline-block;
+      background: linear-gradient(135deg, #ffd700 0%, #ff8c00 100%);
+      border: none;
+      border-radius: 50px;
+      padding: 20px 60px;
+      font-size: 20px;
+      font-family: 'Cinzel', serif;
+      color: #0a0a0f;
+      cursor: pointer;
+      font-weight: bold;
+      letter-spacing: 3px;
+      animation: pulse 2s infinite;
+      transition: transform 0.3s ease;
+    }
+    
+    .btn:hover { transform: scale(1.05); }
+    
+    .btn-secondary {
+      background: transparent;
+      border: 2px solid #ffd700;
+      color: #ffd700;
+      animation: none;
+    }
+    
+    .btn-secondary:hover {
+      background: #ffd700;
+      color: #0a0a0f;
+    }
+    
+    .btn-danger {
+      background: linear-gradient(135deg, #ff4444 0%, #ff8800 100%);
+      color: #fff;
+    }
+    
+    .btn:disabled {
+      background: #333;
+      color: #666;
+      cursor: not-allowed;
+      animation: none;
+    }
+    
+    .stage-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 30px;
+      gap: 15px;
+    }
+    
+    .stage-number {
+      background: #ffd700;
+      color: #0a0a0f;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 24px;
+      font-family: 'Cinzel', serif;
+    }
+    
+    .progress-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+    }
+    
+    .progress-label {
+      color: #888;
+      font-size: 14px;
+    }
+    
+    .progress-value {
+      color: #ffd700;
+      font-size: 14px;
+      background: rgba(255,215,0,0.1);
+      padding: 5px 15px;
+      border-radius: 20px;
+    }
+    
+    .question-text {
+      font-size: 24px;
+      line-height: 1.6;
+      margin-bottom: 30px;
+      font-weight: normal;
+    }
+    
+    .options {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+    
+    .option {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid #333;
+      border-radius: 10px;
+      padding: 20px 25px;
+      font-size: 18px;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .option:hover {
+      transform: translateX(10px);
+      background: rgba(255, 215, 0, 0.2);
+    }
+    
+    .option.selected {
+      border: 2px solid #ffd700;
+      background: rgba(255, 215, 0, 0.2);
+    }
+    
+    .option.correct {
+      background: rgba(0, 255, 0, 0.2);
+      border-color: #00ff00;
+    }
+    
+    .option.wrong {
+      background: rgba(255, 0, 0, 0.2);
+      border-color: #ff0000;
+    }
+    
+    .option-letter {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      border: 2px solid #555;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      color: #888;
+    }
+    
+    .result-box {
+      border-radius: 15px;
+      padding: 25px;
+      text-align: center;
+    }
+    
+    .result-box.success {
+      background: rgba(0,255,0,0.1);
+      border: 2px solid #00ff00;
+    }
+    
+    .result-box.fail {
+      background: rgba(255,0,0,0.1);
+      border: 2px solid #ff0000;
+    }
+    
+    .result-title {
+      font-size: 24px;
+      font-family: 'Cinzel', serif;
+      margin-bottom: 15px;
+    }
+    
+    .result-title.success { color: #00ff00; }
+    .result-title.fail { color: #ff0000; }
+    
+    .big-icon {
+      font-size: 100px;
+      margin-bottom: 20px;
+    }
+    
+    .victory-code {
+      margin-top: 30px;
+      padding: 20px;
+      background: rgba(0,0,0,0.5);
+      border-radius: 10px;
+    }
+    
+    .victory-code-value {
+      font-size: 48px;
+      font-family: monospace;
+      color: #ffd700;
+      letter-spacing: 15px;
+      text-shadow: 0 0 20px #ffd700;
+    }
+    
+    .center { text-align: center; }
+    .hidden { display: none; }
+  </style>
+</head>
+<body>
+  <div class="stars" id="stars"></div>
+  
+  <div class="code-display">
+    <div class="code-label">VAULT CODE</div>
+    <div class="code-value" id="vaultCode">?-?-?</div>
+  </div>
+  
+  <div class="container" id="gameContainer"></div>
+
+  <script>
+    // Game Data
+    const triviaQuestions = [
+      { question: "Which pop star's real name is Stefani Joanne Angelina Germanotta?", correct: "Lady Gaga", options: ["Lady Gaga", "Katy Perry", "Rihanna", "Beyoncé"], stage: 1 },
+      { question: "What was the name of the famous 'King of Pop' who performed 'Thriller'?", correct: "Michael Jackson", options: ["Prince", "Michael Jackson", "Elvis Presley", "James Brown"], stage: 1 },
+      { question: "Which actor played Jack Dawson in 'Titanic'?", correct: "Leonardo DiCaprio", options: ["Brad Pitt", "Leonardo DiCaprio", "Tom Cruise", "Johnny Depp"], stage: 1 },
+      { question: "Which British singer was formerly known as 'Posh Spice'?", correct: "Victoria Beckham", options: ["Mel B", "Emma Bunton", "Victoria Beckham", "Mel C"], stage: 2 },
+      { question: "Which rapper's real name is Marshall Bruce Mathers III?", correct: "Eminem", options: ["Jay-Z", "Eminem", "Kanye West", "Snoop Dogg"], stage: 2 },
+      { question: "Who played Hermione Granger in the Harry Potter films?", correct: "Emma Watson", options: ["Emma Stone", "Emma Watson", "Emily Blunt", "Evanna Lynch"], stage: 2 },
+      { question: "Which singer released the album '25' and is known for 'Hello'?", correct: "Adele", options: ["Taylor Swift", "Adele", "Sia", "Sam Smith"], stage: 3 },
+      { question: "Which billionaire entrepreneur founded SpaceX?", correct: "Elon Musk", options: ["Jeff Bezos", "Elon Musk", "Mark Zuckerberg", "Bill Gates"], stage: 3 },
+      { question: "Who directed 'Pulp Fiction' and 'Kill Bill'?", correct: "Quentin Tarantino", options: ["Martin Scorsese", "Quentin Tarantino", "Christopher Nolan", "Steven Spielberg"], stage: 3 }
+    ];
+
+    const stageNumbers = { 1: 8, 2: 3, 3: 1 };
+    
+    const stageStories = {
+      1: { location: "The Grand Ballroom", intro: "You've infiltrated the legendary Stardust Mansion during the annual Celebrity Gala. Hidden somewhere in this opulent estate is a vault containing the legendary Golden Microphone - an artifact said to grant its owner unparalleled fame. The vault requires a three-digit code...", description: "Crystal chandeliers cast rainbow prisms across marble floors. A-list celebrities mingle beneath Renaissance paintings. A mysterious figure in a velvet mask approaches you...", hint: "The first digit is whispered among the stars." },
+      2: { location: "The Private Cinema", intro: "You've unlocked the secret passage behind the grand piano. It leads to the mansion's private theater...", description: "Red velvet seats face a massive screen playing classic Hollywood moments on loop. Golden statues line the walls. A projection flickers - it seems to contain a message...", hint: "The second digit hides in the silver screen's glow." },
+      3: { location: "The Vault Antechamber", intro: "The hidden elevator descends to the vault level. Emergency lights pulse red. You're so close now...", description: "Steel walls hum with electricity. A keypad glows beside an enormous vault door. This is it - the final challenge. Get this right, and the Golden Microphone is yours...", hint: "The final digit completes your destiny." }
+    };
+
+    // Game State
+    let state = {
+      screen: 'intro',
+      stage: 1,
+      questionIndex: 0,
+      collectedNumbers: [],
+      selectedAnswer: null,
+      showResult: false,
+      isCorrect: false,
+      correctInStage: 0
+    };
+
+    // Create stars
+    function createStars() {
+      const container = document.getElementById('stars');
+      for (let i = 0; i < 50; i++) {
+        const star = document.createElement('div');
+        star.className = 'star';
+        star.style.cssText = `
+          width: ${Math.random() * 3 + 1}px;
+          height: ${Math.random() * 3 + 1}px;
+          left: ${Math.random() * 100}%;
+          top: ${Math.random() * 100}%;
+          animation-delay: ${Math.random() * 2}s;
+          animation-duration: ${Math.random() * 3 + 2}s;
+          opacity: ${Math.random() * 0.7 + 0.3};
+        `;
+        container.appendChild(star);
+      }
+    }
+
+    // Update vault code display
+    function updateVaultCode() {
+      const code = state.collectedNumbers;
+      document.getElementById('vaultCode').textContent = 
+        `${code[0] ?? '?'}-${code[1] ?? '?'}-${code[2] ?? '?'}`;
+    }
+
+    // Render functions
+    function render() {
+      const container = document.getElementById('gameContainer');
+      container.style.animation = 'none';
+      container.offsetHeight; // Trigger reflow
+      container.style.animation = 'fadeIn 0.5s ease-out';
+      
+      switch(state.screen) {
+        case 'intro': renderIntro(); break;
+        case 'story': renderStory(); break;
+        case 'question': renderQuestion(); break;
+        case 'stageComplete': renderStageComplete(); break;
+        case 'victory': renderVictory(); break;
+        case 'gameOver': renderGameOver(); break;
+      }
+      updateVaultCode();
+    }
+
+    function renderIntro() {
+      document.getElementById('gameContainer').innerHTML = `
+        <div class="center">
+          <h1>★ CELEBRITY QUEST ★</h1>
+          <p class="subtitle">A Choose-Your-Own-Adventure Trivia Experience</p>
+          <div class="card">
+            <p>The year is tonight. The most exclusive event in Hollywood history is underway at the legendary <span class="highlight">Stardust Mansion</span>.</p>
+            <p>Rumor has it that deep within the mansion's vault lies the <span class="highlight">Golden Microphone</span> — an artifact of immense power, said to grant its owner eternal fame.</p>
+            <p>You've managed to slip past security. Now you must prove your celebrity knowledge to unlock the vault's <span class="highlight">three-digit code</span>.</p>
+            <p style="color: #888; font-style: italic; font-size: 16px;">Answer correctly to advance. Answer wrong... and security will find you.</p>
+          </div>
+          <button class="btn" onclick="startGame()">ENTER THE MANSION</button>
+        </div>
+      `;
+    }
+
+    function renderStory() {
+      const story = stageStories[state.stage];
+      document.getElementById('gameContainer').innerHTML = `
+        <div class="stage-header">
+          <div class="stage-number">${state.stage}</div>
+          <h2>${story.location}</h2>
+        </div>
+        <div class="card">
+          <p>${story.intro}</p>
+          <p style="font-style: italic; color: #aaa;">${story.description}</p>
+          <p class="hint">"${story.hint}"</p>
+        </div>
+        <div class="center">
+          <button class="btn btn-secondary" onclick="goToQuestion()">APPROACH THE CHALLENGE →</button>
+        </div>
+      `;
+    }
+
+    function renderQuestion() {
+      const questions = triviaQuestions.filter(q => q.stage === state.stage);
+      const q = questions[state.questionIndex % questions.length];
+      const letters = ['A', 'B', 'C', 'D'];
+      
+      let optionsHtml = q.options.map((opt, i) => {
+        let classes = 'option';
+        if (state.selectedAnswer === opt) classes += ' selected';
+        if (state.showResult) {
+          if (opt === q.correct) classes += ' correct';
+          else if (state.selectedAnswer === opt) classes += ' wrong';
+        }
+        return `
+          <div class="${classes}" onclick="selectAnswer('${opt.replace(/'/g, "\\'")}')">
+            <span class="option-letter">${letters[i]}</span>
+            ${opt}
+          </div>
+        `;
+      }).join('');
+
+      let actionHtml = '';
+      if (!state.showResult) {
+        actionHtml = `
+          <div class="center">
+            <button class="btn" ${!state.selectedAnswer ? 'disabled' : ''} onclick="submitAnswer()">LOCK IN ANSWER</button>
+          </div>
+        `;
+      } else {
+        const resultClass = state.isCorrect ? 'success' : 'fail';
+        const titleClass = state.isCorrect ? 'success' : 'fail';
+        let message = '';
+        let buttonText = '';
+        
+        if (state.isCorrect) {
+          if (state.correctInStage >= 2) {
+            message = `Perfect! You've proven your worth. The number ${stageNumbers[state.stage]} reveals itself...`;
+            buttonText = 'CLAIM YOUR NUMBER';
+          } else {
+            message = 'Well done! Continue to the next challenge...';
+            buttonText = 'NEXT QUESTION →';
+          }
+        } else {
+          message = `The answer was: ${q.correct}`;
+          buttonText = 'FACE YOUR FATE';
+        }
+        
+        actionHtml = `
+          <div class="result-box ${resultClass}">
+            <p class="result-title ${titleClass}">${state.isCorrect ? '★ CORRECT! ★' : '✗ INCORRECT'}</p>
+            <p style="color: #aaa; margin-bottom: 20px;">${message}</p>
+            <button class="btn ${state.isCorrect ? '' : 'btn-danger'}" onclick="nextQuestion()">${buttonText}</button>
+          </div>
+        `;
+      }
+
+      document.getElementById('gameContainer').innerHTML = `
+        <div class="progress-bar">
+          <span class="progress-label">STAGE ${state.stage} • Question ${(state.questionIndex % 3) + 1}</span>
+          <span class="progress-value">Progress: ${state.correctInStage}/2 correct needed</span>
+        </div>
+        <div class="card" style="background: rgba(0,0,0,0.6); border-color: #444;">
+          <h3 class="question-text">${q.question}</h3>
+          <div class="options">${optionsHtml}</div>
+        </div>
+        ${actionHtml}
+      `;
+    }
+
+    function renderStageComplete() {
+      document.getElementById('gameContainer').innerHTML = `
+        <div class="center">
+          <div class="big-icon" style="animation: pulse 1s infinite;">🔓</div>
+          <h1 style="font-size: 36px;">CODE DIGIT UNLOCKED!</h1>
+          <div style="font-size: 80px; font-family: monospace; color: #ffd700; text-shadow: 0 0 30px #ffd700; margin: 30px 0;">
+            ${stageNumbers[state.stage]}
+          </div>
+          <p style="font-size: 18px; color: #aaa; margin-bottom: 40px;">
+            ${state.stage === 3 ? 'The final digit! The vault code is complete!' : `${3 - state.stage} digit${3 - state.stage > 1 ? 's' : ''} remaining...`}
+          </p>
+          <button class="btn" onclick="nextStage()">${state.stage === 3 ? 'OPEN THE VAULT' : 'CONTINUE DEEPER →'}</button>
+        </div>
+      `;
+    }
+
+    function renderVictory() {
+      document.getElementById('gameContainer').innerHTML = `
+        <div class="center">
+          <div class="big-icon" style="font-size: 120px; animation: pulse 1s infinite;">🎤</div>
+          <h1>★ VICTORY! ★</h1>
+          <p style="font-size: 20px; margin-bottom: 30px;">The vault opens with a satisfying click...</p>
+          <div class="card" style="background: rgba(255,215,0,0.1); border-color: #ffd700;">
+            <p>The <span class="highlight">Golden Microphone</span> gleams before you, pulsing with an otherworldly light. You reach out and grasp it...</p>
+            <p style="font-size: 24px; font-style: italic; color: #ffd700;">You have proven yourself worthy of eternal fame.</p>
+            <div class="victory-code">
+              <p style="color: #888; margin-bottom: 10px;">THE COMPLETE VAULT CODE:</p>
+              <p class="victory-code-value">${state.collectedNumbers.join('-')}</p>
+            </div>
+          </div>
+          <button class="btn btn-secondary" onclick="restart()">PLAY AGAIN</button>
+        </div>
+      `;
+    }
+
+    function renderGameOver() {
+      document.getElementById('gameContainer').innerHTML = `
+        <div class="center">
+          <div class="big-icon">🚨</div>
+          <h1 style="color: #ff4444;">SECURITY ALERT!</h1>
+          <div class="card" style="background: rgba(255,0,0,0.1); border-color: #ff4444;">
+            <p>Your lack of celebrity knowledge has triggered the alarm system. Guards swarm the area as spotlights illuminate your position...</p>
+            <p style="color: #888;">You managed to collect ${state.collectedNumbers.length} of 3 code digits.</p>
+            ${state.collectedNumbers.length > 0 ? `<p style="font-size: 24px; font-family: monospace; color: #ffd700; margin-top: 15px;">Partial code: ${state.collectedNumbers.join('-')}-?</p>` : ''}
+          </div>
+          <button class="btn btn-danger" onclick="restart()">TRY AGAIN</button>
+        </div>
+      `;
+    }
+
+    // Game actions
+    function startGame() {
+      state.screen = 'story';
+      render();
+    }
+
+    function goToQuestion() {
+      state.screen = 'question';
+      render();
+    }
+
+    function selectAnswer(answer) {
+      if (state.showResult) return;
+      state.selectedAnswer = answer;
+      render();
+    }
+
+    function submitAnswer() {
+      if (!state.selectedAnswer) return;
+      const questions = triviaQuestions.filter(q => q.stage === state.stage);
+      const q = questions[state.questionIndex % questions.length];
+      state.isCorrect = state.selectedAnswer === q.correct;
+      state.showResult = true;
+      if (state.isCorrect) state.correctInStage++;
+      render();
+    }
+
+    function nextQuestion() {
+      if (state.isCorrect && state.correctInStage >= 2) {
+        state.collectedNumbers.push(stageNumbers[state.stage]);
+        state.screen = 'stageComplete';
+      } else if (!state.isCorrect) {
+        state.screen = 'gameOver';
+      } else {
+        state.questionIndex++;
+        state.selectedAnswer = null;
+        state.showResult = false;
+      }
+      render();
+    }
+
+    function nextStage() {
+      if (state.stage === 3) {
+        state.screen = 'victory';
+      } else {
+        state.stage++;
+        state.questionIndex = 0;
+        state.correctInStage = 0;
+        state.selectedAnswer = null;
+        state.showResult = false;
+        state.screen = 'story';
+      }
+      render();
+    }
+
+    function restart() {
+      state = {
+        screen: 'intro',
+        stage: 1,
+        questionIndex: 0,
+        collectedNumbers: [],
+        selectedAnswer: null,
+        showResult: false,
+        isCorrect: false,
+        correctInStage: 0
+      };
+      render();
+    }
+
+    // Initialize
+    createStars();
+    render();
+  </script>
+</body>
+</html>
