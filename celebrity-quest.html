@@ -6,9 +6,9 @@
   <title>Celebrity Quest</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Cinzel:wght@400;700&display=swap');
-    
+
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    
+
     body {
       min-height: 100vh;
       background: linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 50%, #16213e 100%);
@@ -16,36 +16,36 @@
       color: #e8d5b7;
       overflow-x: hidden;
     }
-    
+
     .stars {
       position: fixed;
       top: 0; left: 0; right: 0; bottom: 0;
       pointer-events: none;
       z-index: 1;
     }
-    
+
     .star {
       position: absolute;
       background: #ffd700;
       border-radius: 50%;
       animation: twinkle 3s ease-in-out infinite;
     }
-    
+
     @keyframes twinkle {
       0%, 100% { opacity: 0.3; transform: scale(1); }
       50% { opacity: 1; transform: scale(1.2); }
     }
-    
+
     @keyframes pulse {
       0%, 100% { box-shadow: 0 0 20px rgba(255, 215, 0, 0.3); }
       50% { box-shadow: 0 0 40px rgba(255, 215, 0, 0.6); }
     }
-    
+
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(20px); }
       to { opacity: 1; transform: translateY(0); }
     }
-    
+
     .container {
       max-width: 800px;
       margin: 0 auto;
@@ -54,7 +54,7 @@
       z-index: 10;
       animation: fadeIn 0.5s ease-out;
     }
-    
+
     .code-display {
       position: fixed;
       top: 20px;
@@ -65,14 +65,14 @@
       padding: 15px 25px;
       z-index: 100;
     }
-    
+
     .code-label {
       font-size: 12px;
       letter-spacing: 3px;
       color: #888;
       margin-bottom: 5px;
     }
-    
+
     .code-value {
       font-size: 32px;
       font-family: monospace;
@@ -80,7 +80,7 @@
       color: #ffd700;
       text-shadow: 0 0 10px #ffd700;
     }
-    
+
     h1 {
       font-size: 48px;
       font-family: 'Cinzel', serif;
@@ -90,14 +90,14 @@
       letter-spacing: 5px;
       text-align: center;
     }
-    
+
     h2 {
       font-size: 28px;
       font-family: 'Cinzel', serif;
       color: #ffd700;
       margin: 0;
     }
-    
+
     .subtitle {
       font-size: 18px;
       font-style: italic;
@@ -105,7 +105,7 @@
       margin-bottom: 40px;
       text-align: center;
     }
-    
+
     .card {
       background: rgba(0,0,0,0.5);
       border: 1px solid #333;
@@ -114,14 +114,14 @@
       margin-bottom: 30px;
       line-height: 1.8;
     }
-    
+
     .card p {
       font-size: 18px;
       margin-bottom: 20px;
     }
-    
+
     .highlight { color: #ffd700; }
-    
+
     .hint {
       font-size: 16px;
       color: #ffd700;
@@ -129,7 +129,7 @@
       padding-left: 15px;
       font-style: italic;
     }
-    
+
     .btn {
       display: inline-block;
       background: linear-gradient(135deg, #ffd700 0%, #ff8c00 100%);
@@ -145,40 +145,40 @@
       animation: pulse 2s infinite;
       transition: transform 0.3s ease;
     }
-    
+
     .btn:hover { transform: scale(1.05); }
-    
+
     .btn-secondary {
       background: transparent;
       border: 2px solid #ffd700;
       color: #ffd700;
       animation: none;
     }
-    
+
     .btn-secondary:hover {
       background: #ffd700;
       color: #0a0a0f;
     }
-    
+
     .btn-danger {
       background: linear-gradient(135deg, #ff4444 0%, #ff8800 100%);
       color: #fff;
     }
-    
+
     .btn:disabled {
       background: #333;
       color: #666;
       cursor: not-allowed;
       animation: none;
     }
-    
+
     .stage-header {
       display: flex;
       align-items: center;
       margin-bottom: 30px;
       gap: 15px;
     }
-    
+
     .stage-number {
       background: #ffd700;
       color: #0a0a0f;
@@ -192,19 +192,19 @@
       font-size: 24px;
       font-family: 'Cinzel', serif;
     }
-    
+
     .progress-bar {
       display: flex;
       justify-content: space-between;
       align-items: center;
       margin-bottom: 30px;
     }
-    
+
     .progress-label {
       color: #888;
       font-size: 14px;
     }
-    
+
     .progress-value {
       color: #ffd700;
       font-size: 14px;
@@ -212,20 +212,20 @@
       padding: 5px 15px;
       border-radius: 20px;
     }
-    
+
     .question-text {
       font-size: 24px;
       line-height: 1.6;
       margin-bottom: 30px;
       font-weight: normal;
     }
-    
+
     .options {
       display: flex;
       flex-direction: column;
       gap: 15px;
     }
-    
+
     .option {
       background: rgba(255,255,255,0.05);
       border: 1px solid #333;
@@ -238,27 +238,27 @@
       cursor: pointer;
       transition: all 0.3s ease;
     }
-    
+
     .option:hover {
       transform: translateX(10px);
       background: rgba(255, 215, 0, 0.2);
     }
-    
+
     .option.selected {
       border: 2px solid #ffd700;
       background: rgba(255, 215, 0, 0.2);
     }
-    
+
     .option.correct {
       background: rgba(0, 255, 0, 0.2);
       border-color: #00ff00;
     }
-    
+
     .option.wrong {
       background: rgba(255, 0, 0, 0.2);
       border-color: #ff0000;
     }
-    
+
     .option-letter {
       width: 30px;
       height: 30px;
@@ -270,44 +270,44 @@
       font-size: 14px;
       color: #888;
     }
-    
+
     .result-box {
       border-radius: 15px;
       padding: 25px;
       text-align: center;
     }
-    
+
     .result-box.success {
       background: rgba(0,255,0,0.1);
       border: 2px solid #00ff00;
     }
-    
+
     .result-box.fail {
       background: rgba(255,0,0,0.1);
       border: 2px solid #ff0000;
     }
-    
+
     .result-title {
       font-size: 24px;
       font-family: 'Cinzel', serif;
       margin-bottom: 15px;
     }
-    
+
     .result-title.success { color: #00ff00; }
     .result-title.fail { color: #ff0000; }
-    
+
     .big-icon {
       font-size: 100px;
       margin-bottom: 20px;
     }
-    
+
     .victory-code {
       margin-top: 30px;
       padding: 20px;
       background: rgba(0,0,0,0.5);
       border-radius: 10px;
     }
-    
+
     .victory-code-value {
       font-size: 48px;
       font-family: monospace;
@@ -315,34 +315,40 @@
       letter-spacing: 15px;
       text-shadow: 0 0 20px #ffd700;
     }
-    
+
     .center { text-align: center; }
     .hidden { display: none; }
   </style>
 </head>
 <body>
   <div class="stars" id="stars"></div>
-  
+
   <div class="code-display">
     <div class="code-label">VAULT CODE</div>
     <div class="code-value" id="vaultCode">?-?-?</div>
   </div>
-  
+
   <div class="container" id="gameContainer"></div>
 
   <script>
     // Game Data
     const triviaQuestions = [
-          { question: "On August 1, 2025, flags in Tallahassee, Florida, flew at half-staff to commemorate his life & legacy:", correct: "Hulk Hogan", options: ["Randy Savage", "Hulk Hogan", "Ric Flair", "The Ultimate Warrior"], stage: 1 },
-          { question: "On March 21st, 2025, this boxing champ left behind 12 children, including 5 sons who share his name:", correct: "George Foreman", options: ["Muhammad Ali", "Mike Tyson", "George Foreman", "Evander Holyfield"], stage: 1 },
-          { question: "In 2025, game shows are to the death in 'The Running Man', written by Stephen King under this pseudonym:", correct: "Richard Bachman", options: ["Donald Westlake", "Richard Bachman", "John Swithen", "Beryl Evans"], stage: 2 },
-          { question: "In April 2025 the Empire State Building was lit up in green to celebrate the 100th anniversary of this novel's publication:", correct: "The Great Gatsby", options: ["Mrs. Dalloway", "An American Tragedy", "The Great Gatsby", "The Trial"], stage: 2 },
-          { question: "In 2025, this country band released 'Life Is A Highway: Refueled Duets':", correct: "Rascal Flatts", options: ["Lady A", "Little Big Town", "Rascal Flatts", "Old Dominion"], stage: 3 },
-          { question: "In 2025 Barbra Streisand sang 'The First Time Ever I Saw Your Face' with this Irishman nearly 50 years her junior:", correct: "Hozier", options: ["Niall Horan", "Bono", "Hozier", "Glen Hansard"], stage: 3 }
+      { question: "On August 1, 2025, flags in Tallahassee, Florida, flew at half-staff to commemorate his life & legacy:", correct: "Hulk Hogan", options: ["Randy Savage", "Hulk Hogan", "Ric Flair", "The Ultimate Warrior"], stage: 1 },
+      { question: "On March 21st, 2025, this boxing champ left behind 12 children, including 5 sons who share his name:", correct: "George Foreman", options: ["Muhammad Ali", "Mike Tyson", "George Foreman", "Evander Holyfield"], stage: 1 },
+      { question: "Born more than 60 years after his grandfather's death, the last grandchild of this 10th president passed away in 2025 at 96:", correct: "Tyler", options: ["Tyler", "Polk", "Harrison", "Fillmore"], stage: 1 },
+      { question: "In 2025, Phil Robertson, the patriarch of the Louisiana family featured on this reality show, passed away:", correct: "Duck Dynasty", options: ["Swamp People", "Duck Dynasty", "The Robertson Family", "Cajun Justice"], stage: 1 },
+      { question: "In 2025, game shows are to the death in 'The Running Man', written by Stephen King under this pseudonym:", correct: "Richard Bachman", options: ["Donald Westlake", "Richard Bachman", "John Swithen", "Beryl Evans"], stage: 2 },
+      { question: "In April 2025 the Empire State Building was lit up in green to celebrate the 100th anniversary of this novel's publication:", correct: "The Great Gatsby", options: ["Mrs. Dalloway", "An American Tragedy", "The Great Gatsby", "The Trial"], stage: 2 },
+      { question: "This film that turned 50 in 2025 has become a cult classic thanks to midnight showings:", correct: "The Rocky Horror Picture Show", options: ["Eraserhead", "Pink Flamingos", "The Rocky Horror Picture Show", "The Texas Chain Saw Massacre"], stage: 2 },
+      { question: "In June 2025 this star, Elphaba on screen & Celie on stage, is set to host the Tony Awards:", correct: "Cynthia Erivo", options: ["Ariana Grande", "Cynthia Erivo", "Jennifer Hudson", "Fantasia Barrino"], stage: 2 },
+      { question: "In 2025, this country band released 'Life Is A Highway: Refueled Duets':", correct: "Rascal Flatts", options: ["Lady A", "Little Big Town", "Rascal Flatts", "Old Dominion"], stage: 3 },
+      { question: "In 2025 Barbra Streisand sang 'The First Time Ever I Saw Your Face' with this Irishman nearly 50 years her junior:", correct: "Hozier", options: ["Niall Horan", "Bono", "Hozier", "Glen Hansard"], stage: 3 },
+      { question: "Best Music Video / Visual Album in 2025 went to Kendrick Lamar for this track dissing Drake:", correct: "Not Like Us", options: ["Euphoria", "6:16 in LA", "Not Like Us", "Meet the Grahams"], stage: 3 },
+      { question: "In March 2025 Blake Shelton hosted a 100th anniversary celebration of this, which began as a radio show:", correct: "the Grand Ole Opry", options: ["the Louisiana Hayride", "the Grand Ole Opry", "the WSM Barn Dance", "the National Barn Dance"], stage: 3 }
         ];
 
     const stageNumbers = { 1: 8, 2: 3, 3: 1 };
-    
+
     const stageStories = {
       1: { location: "The Grand Ballroom", intro: "You've infiltrated the legendary Crofton Mansion during the annual Celebrity Trivia Gala. Hidden somewhere in this opulent estate is a vault containing the legendary Platinum Microphone - an artifact said to grant its owner unparalleled fame. The vault requires a three-digit code...", description: "Crystal chandeliers cast rainbow prisms across marble floors. A-list celebrities mingle beneath Renaissance paintings. A mysterious figure in a velvet mask approaches you...", hint: "The first digit is whispered among the stars." },
       2: { location: "The Private Cinema", intro: "You've unlocked the secret passage behind the grand piano. It leads to the mansion's private theater...", description: "Red velvet seats face a massive screen playing classic Hollywood moments on loop. Golden statues line the walls. A projection flickers - it seems to contain a message...", hint: "The second digit hides in the silver screen's glow." },
@@ -383,7 +389,7 @@
     // Update vault code display
     function updateVaultCode() {
       const code = state.collectedNumbers;
-      document.getElementById('vaultCode').textContent = 
+      document.getElementById('vaultCode').textContent =
         `${code[0] ?? '?'}-${code[1] ?? '?'}-${code[2] ?? '?'}`;
     }
 
@@ -393,7 +399,7 @@
       container.style.animation = 'none';
       container.offsetHeight; // Trigger reflow
       container.style.animation = 'fadeIn 0.5s ease-out';
-      
+
       switch(state.screen) {
         case 'intro': renderIntro(); break;
         case 'story': renderStory(); break;
@@ -443,7 +449,7 @@
       const questions = triviaQuestions.filter(q => q.stage === state.stage);
       const q = questions[state.questionIndex % questions.length];
       const letters = ['A', 'B', 'C', 'D'];
-      
+
       let optionsHtml = q.options.map((opt, i) => {
         let classes = 'option';
         if (state.selectedAnswer === opt) classes += ' selected';
@@ -471,9 +477,9 @@
         const titleClass = state.isCorrect ? 'success' : 'fail';
         let message = '';
         let buttonText = '';
-        
+
         if (state.isCorrect) {
-          if (state.correctInStage >= 2) {
+          if (state.correctInStage >= 4) {
             message = `Perfect! You've proven your worth. The number ${stageNumbers[state.stage]} reveals itself...`;
             buttonText = 'CLAIM YOUR NUMBER';
           } else {
@@ -484,7 +490,7 @@
           message = `The answer was: ${q.correct}`;
           buttonText = 'FACE YOUR FATE';
         }
-        
+
         actionHtml = `
           <div class="result-box ${resultClass}">
             <p class="result-title ${titleClass}">${state.isCorrect ? '★ CORRECT! ★' : '✗ INCORRECT'}</p>
@@ -497,7 +503,7 @@
       document.getElementById('gameContainer').innerHTML = `
         <div class="progress-bar">
           <span class="progress-label">STAGE ${state.stage} • Question ${(state.questionIndex % 3) + 1}</span>
-          <span class="progress-value">Progress: ${state.correctInStage}/2 correct needed</span>
+          <span class="progress-value">Progress: ${state.correctInStage}/4 correct needed</span>
         </div>
         <div class="card" style="background: rgba(0,0,0,0.6); border-color: #444;">
           <h3 class="question-text">${q.question}</h3>
@@ -585,7 +591,7 @@
     }
 
     function nextQuestion() {
-      if (state.isCorrect && state.correctInStage >= 2) {
+      if (state.isCorrect && state.correctInStage >= 4) {
         state.collectedNumbers.push(stageNumbers[state.stage]);
         state.screen = 'stageComplete';
       } else if (!state.isCorrect) {
@@ -613,6 +619,7 @@
     }
 
     function restart() {
+    /*
       state = {
         screen: 'intro',
         stage: 1,
@@ -623,6 +630,12 @@
         isCorrect: false,
         correctInStage: 0
       };
+      */
+      state.questionIndex = 0
+      state.selectedAnswer = null;
+      state.showResult = false;
+      state.screen = 'story';
+      state.correctInStage = 0;
       render();
     }
 
